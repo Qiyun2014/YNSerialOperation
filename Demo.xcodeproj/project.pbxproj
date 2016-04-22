@@ -15,6 +15,8 @@
 		FA1C524C1CA0F14D00C3C73A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA1C524A1CA0F14D00C3C73A /* LaunchScreen.storyboard */; };
 		FA1C52571CA0F14D00C3C73A /* DemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1C52561CA0F14D00C3C73A /* DemoTests.m */; };
 		FA1C52621CA0F14D00C3C73A /* DemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1C52611CA0F14D00C3C73A /* DemoUITests.m */; };
+		FA4AF1D41CCA2C0500B2B981 /* PDFMapTrackCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4AF1D11CCA2C0500B2B981 /* PDFMapTrackCollectionView.m */; };
+		FA4AF1D51CCA2C0500B2B981 /* PDFMapTrackCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4AF1D31CCA2C0500B2B981 /* PDFMapTrackCollectionCell.m */; };
 		FA5886E61CB5182000ECB5C3 /* YNSerialOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5886E51CB5182000ECB5C3 /* YNSerialOperation.m */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +54,10 @@
 		FA1C525D1CA0F14D00C3C73A /* DemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA1C52611CA0F14D00C3C73A /* DemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoUITests.m; sourceTree = "<group>"; };
 		FA1C52631CA0F14D00C3C73A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA4AF1D01CCA2C0500B2B981 /* PDFMapTrackCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFMapTrackCollectionView.h; sourceTree = "<group>"; };
+		FA4AF1D11CCA2C0500B2B981 /* PDFMapTrackCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFMapTrackCollectionView.m; sourceTree = "<group>"; };
+		FA4AF1D21CCA2C0500B2B981 /* PDFMapTrackCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFMapTrackCollectionCell.h; sourceTree = "<group>"; };
+		FA4AF1D31CCA2C0500B2B981 /* PDFMapTrackCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFMapTrackCollectionCell.m; sourceTree = "<group>"; };
 		FA5886E41CB5182000ECB5C3 /* YNSerialOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YNSerialOperation.h; sourceTree = "<group>"; };
 		FA5886E51CB5182000ECB5C3 /* YNSerialOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YNSerialOperation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,6 +110,10 @@
 		FA1C523B1CA0F14D00C3C73A /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				FA4AF1D01CCA2C0500B2B981 /* PDFMapTrackCollectionView.h */,
+				FA4AF1D11CCA2C0500B2B981 /* PDFMapTrackCollectionView.m */,
+				FA4AF1D21CCA2C0500B2B981 /* PDFMapTrackCollectionCell.h */,
+				FA4AF1D31CCA2C0500B2B981 /* PDFMapTrackCollectionCell.m */,
 				FA1C523F1CA0F14D00C3C73A /* AppDelegate.h */,
 				FA1C52401CA0F14D00C3C73A /* AppDelegate.m */,
 				FA1C52421CA0F14D00C3C73A /* ViewController.h */,
@@ -277,8 +287,10 @@
 			files = (
 				FA1C52441CA0F14D00C3C73A /* ViewController.m in Sources */,
 				FA1C52411CA0F14D00C3C73A /* AppDelegate.m in Sources */,
+				FA4AF1D41CCA2C0500B2B981 /* PDFMapTrackCollectionView.m in Sources */,
 				FA1C523E1CA0F14D00C3C73A /* main.m in Sources */,
 				FA5886E61CB5182000ECB5C3 /* YNSerialOperation.m in Sources */,
+				FA4AF1D51CCA2C0500B2B981 /* PDFMapTrackCollectionCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

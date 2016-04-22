@@ -1,21 +1,28 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "E6BA51B0A178DEDCF6C39249F5CD614B22AE10DC",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "18527187C9A68066628626BA09E4FD4E41907B63",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
     "E6BA51B0A178DEDCF6C39249F5CD614B22AE10DC" : 0,
-    "340C15712BE36B094055E446A247EC929E15CBE1" : 0
+    "340C15712BE36B094055E446A247EC929E15CBE1" : 0,
+    "18527187C9A68066628626BA09E4FD4E41907B63" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "3C180ED4-6648-4876-820F-C2DE55B2B4E4",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "E6BA51B0A178DEDCF6C39249F5CD614B22AE10DC" : "MyNote\/",
-    "340C15712BE36B094055E446A247EC929E15CBE1" : ""
+    "340C15712BE36B094055E446A247EC929E15CBE1" : "",
+    "18527187C9A68066628626BA09E4FD4E41907B63" : "YNSerialOperation\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Demo",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
   "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Demo.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Qiyun2014\/YNSerialOperation.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "18527187C9A68066628626BA09E4FD4E41907B63"
+    },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Qiyun2014\/SourceTree_managerFile.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",

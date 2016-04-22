@@ -8,8 +8,12 @@
 
 #import "ViewController.h"
 #import "YNSerialOperation.h"
+#import "PDFMapTrackCollectionView.h"
 
 @interface ViewController ()
+
+@property (nonatomic,strong) PDFMapTrackCollectionView *collectionView;
+
 @end
 
 @implementation ViewController
@@ -19,6 +23,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    self.collectionView = [[PDFMapTrackCollectionView alloc] initWithFrame:CGRectInset(self.view.frame, 150, 100) viewLayou:nil];
+    [self.view addSubview:self.collectionView];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
