@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PDFMapTrackCollectionView : UICollectionView<UICollectionViewDataSource,UICollectionViewDelegate>
+@interface PDFMapTrackCollectionView : UICollectionView
+<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 
 - (id)initWithFrame:(CGRect)frame viewLayou:(UICollectionViewLayout *)viewLayout;
 

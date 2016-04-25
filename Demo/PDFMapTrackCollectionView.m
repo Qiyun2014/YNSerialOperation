@@ -19,7 +19,8 @@
     //确定是水平滚动，还是垂直滚动
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    
+    //flowLayout.headerReferenceSize = CGSizeMake(self.frame.size.width, 30);
+
     if (self = [super initWithFrame:frame collectionViewLayout:viewLayout?viewLayout:flowLayout]) {
         
         _dataSource = [NSMutableArray array];
@@ -32,8 +33,10 @@
         self = [[PDFMapTrackCollectionView alloc] initWithFrame:frame collectionViewLayout:flowLayout];
         self.delegate = self;
         self.dataSource = self;
-        [self registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"UICollectionViewCell"];
+        [self registerClass:[PDFMapTrackCollectionCell class] forCellWithReuseIdentifier:@"cellId"];
+        [self registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"reusableView"];
         
+
         //此处给其增加长按手势，用此手势触发cell移动效果
         UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handlelongGesture:)];
         [self addGestureRecognizer:longGesture];
@@ -57,16 +60,13 @@
 //每个UICollectionView展示的内容
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * CellIdentifier = @"UICollectionViewCell";
-    UICollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+    PDFMapTrackCollectionCell * cell = (PDFMapTrackCollectionCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"cellId" forIndexPath:indexPath];
+
     cell.backgroundColor = [UIColor colorWithRed:((60 * indexPath.row) / 255.0) green:((70 * indexPath.row)/255.0) blue:((80 * indexPath.row)/255.0) alpha:1.0f];
-   
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectInset(cell.frame, 20, 20)];
-    label.text = [[[NSDate date] description] stringByAppendingString:[NSString stringWithFormat:@"%@",_dataSource[indexPath.row]]];
-    label.textColor = [UIColor whiteColor];
-    [cell.contentView addSubview:label];
-    
+
+    cell.botlabel.text = [NSString stringWithFormat:@"{%ld,%ld}",(long)indexPath.section,(long)indexPath.row];
+
+    NSLog(@"frame = %@",NSStringFromCGRect(cell.frame));
     return cell;
 }
 
@@ -110,6 +110,18 @@
     [_dataSource removeObject:objc];
     //将数据插入到资源数组中的目标位置上
     [_dataSource insertObject:objc atIndex:destinationIndexPath.item];
+}
+
+//通过设置SupplementaryViewOfKind 来设置头部或者底部的view，其中 ReuseIdentifier 的值必须和 注册是填写的一致，本例都为 “reusableView”
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"reusableView" forIndexPath:indexPath];
+    headerView.backgroundColor =[UIColor grayColor];
+    UILabel *label = [[UILabel alloc] initWithFrame:headerView.bounds];
+    label.text = @"这是collectionView的头部";
+    label.font = [UIFont systemFontOfSize:20];
+    [headerView addSubview:label];
+    return headerView;
 }
 
 

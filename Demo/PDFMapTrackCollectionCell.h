@@ -10,4 +10,9 @@
 
 @interface PDFMapTrackCollectionCell : UICollectionViewCell
 
+@property (nonatomic,strong) UILabel *botlabel;
+
+@property (nonatomic,strong) UIImageView *topImage;
+
+
 @end
