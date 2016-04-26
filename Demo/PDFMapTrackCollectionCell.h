@@ -8,11 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class PDFImageView;
 @interface PDFMapTrackCollectionCell : UICollectionViewCell
 
-@property (nonatomic,strong) UILabel *botlabel;
+@property (nonatomic, strong) UILabel       *botlabel;
+@property (nonatomic, strong) PDFImageView   *topImage;
+@property (nonatomic, strong) UIButton      *item;
 
-@property (nonatomic,strong) UIImageView *topImage;
+@end
 
+
+@interface PDFImageView : UIImageView
 
 @end

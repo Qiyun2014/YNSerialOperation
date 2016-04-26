@@ -9,12 +9,15 @@
 #import "PDFMapTrackCollectionView.h"
 #import "PDFMapTrackCollectionCell.h"
 
-@implementation PDFMapTrackCollectionView{
-    
-    NSMutableArray *_dataSource;
-}
+@interface PDFMapTrackCollectionView ()
 
-- (id)initWithFrame:(CGRect)frame viewLayou:(UICollectionViewLayout *)viewLayout{
+@property (nonatomic, copy) NSMutableArray *datas;
+
+@end
+
+@implementation PDFMapTrackCollectionView
+
+- (id)initWithFrame:(CGRect)frame viewLayou:(UICollectionViewLayout *)viewLayout itemsCount:(NSInteger)count{
     
     //确定是水平滚动，还是垂直滚动
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -22,21 +25,19 @@
     //flowLayout.headerReferenceSize = CGSizeMake(self.frame.size.width, 30);
 
     if (self = [super initWithFrame:frame collectionViewLayout:viewLayout?viewLayout:flowLayout]) {
-        
-        _dataSource = [NSMutableArray array];
-        
-        for (int i = 1; i <= 5; i++) {
-            NSString *imageName = [NSString stringWithFormat:@"%d",i];
-            [_dataSource addObject:imageName];
-        }
-    
+            
         self = [[PDFMapTrackCollectionView alloc] initWithFrame:frame collectionViewLayout:flowLayout];
-        self.delegate = self;
-        self.dataSource = self;
         [self registerClass:[PDFMapTrackCollectionCell class] forCellWithReuseIdentifier:@"cellId"];
         [self registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"reusableView"];
         
-
+        _datas = [[NSMutableArray alloc] initWithCapacity:9];
+        for (int i = 0; i < count; i++) {
+            
+            NSString *imageName = [NSString stringWithFormat:@"%d",i];
+            [_datas addObject:imageName];
+        }
+        self.delegate = self;
+        self.dataSource = self;
         //此处给其增加长按手势，用此手势触发cell移动效果
         UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handlelongGesture:)];
         [self addGestureRecognizer:longGesture];
@@ -44,11 +45,39 @@
     return self;
 }
 
+- (NSInteger)itemCount{
+    
+    return _datas.count;
+}
+
+- (void)setItemImages:(NSArray *)itemImages{
+    
+    _itemImages = itemImages;
+    
+    if (itemImages.count >= 1) {
+        
+        [self reloadData];
+    }
+}
+
+- (void)setShowBorder:(BOOL)showBorder{
+    
+    _showBorder = showBorder;
+    
+    if (_showBorder) {
+        
+        self.layer.cornerRadius = 4;
+        self.clipsToBounds = YES;
+        self.layer.borderWidth = 0.5;
+        self.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    }
+}
+
 #pragma mark -- UICollectionViewDataSource
 //定义展示的UICollectionViewCell的个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 5;
+    return _datas.count;
 }
 
 //定义展示的Section的个数
@@ -63,11 +92,24 @@
     PDFMapTrackCollectionCell * cell = (PDFMapTrackCollectionCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"cellId" forIndexPath:indexPath];
 
     cell.backgroundColor = [UIColor colorWithRed:((60 * indexPath.row) / 255.0) green:((70 * indexPath.row)/255.0) blue:((80 * indexPath.row)/255.0) alpha:1.0f];
+    //cell.botlabel.text = [NSString stringWithFormat:@"{%ld,%ld}",(long)indexPath.section,(long)indexPath.row];
+    
+    /* 设置图片背景 */
+    if (self.itemImages.count > indexPath.row)  cell.topImage.image = self.itemImages[indexPath.row];
+    
+    if ([self.collectionDelegate respondsToSelector:@selector(collectionView:collectionViewCell:cellForRowAtIndexPath:)]) {
+        [self.collectionDelegate collectionView:collectionView collectionViewCell:cell cellForRowAtIndexPath:indexPath];
+    }
 
-    cell.botlabel.text = [NSString stringWithFormat:@"{%ld,%ld}",(long)indexPath.section,(long)indexPath.row];
-
-    NSLog(@"frame = %@",NSStringFromCGRect(cell.frame));
+    //NSLog(@"frame = %@",NSStringFromCGRect(cell.frame));
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    PDFMapTrackCollectionCell *cell = (PDFMapTrackCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    cell.selected = false;
+    cell.highlighted = true;
 }
 
 #pragma mark --UICollectionViewDelegateFlowLayout
@@ -75,13 +117,20 @@
 //定义每个UICollectionView 的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(collectionView.bounds.size.width - 20, collectionView.bounds.size.width - 20);
+    return CGSizeMake(collectionView.bounds.size.width, collectionView.bounds.size.width);
 }
 
 //定义每个UICollectionView 的 margin
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(5, 5, 5, 5);
+    CGFloat spaceZone = (CGRectGetHeight(self.bounds) - (CGRectGetWidth(self.bounds) * [collectionView numberOfItemsInSection:0]))/[collectionView numberOfItemsInSection:0];
+    return UIEdgeInsetsMake(spaceZone/2, 5, 5, 5);
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
+    
+    CGFloat spaceZone = (CGRectGetHeight(self.bounds) - (CGRectGetWidth(self.bounds) * [collectionView numberOfItemsInSection:0]))/[collectionView numberOfItemsInSection:0];
+    return spaceZone;
 }
 
 #pragma mark --UICollectionViewDelegate
@@ -89,8 +138,13 @@
 //UICollectionView被选中时调用的方法
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell * cell = (UICollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    cell.backgroundColor = [UIColor whiteColor];
+    //UICollectionViewCell * cell = (UICollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    //cell.backgroundColor = [UIColor whiteColor];
+    
+    if ([self.collectionDelegate respondsToSelector:@selector(collectionView:didSelectRowAtIndexPath:)]) {
+        
+        [self.collectionDelegate collectionView:collectionView didSelectRowAtIndexPath:indexPath];
+    }
 }
 //返回这个UICollectionView是否可以被选择
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -105,11 +159,11 @@
 
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath*)destinationIndexPath {
     //取出源item数据
-    id objc = [_dataSource objectAtIndex:sourceIndexPath.item];
+    id objc = [_datas objectAtIndex:sourceIndexPath.item];
     //从资源数组中移除该数据
-    [_dataSource removeObject:objc];
+    [_datas removeObject:objc];
     //将数据插入到资源数组中的目标位置上
-    [_dataSource insertObject:objc atIndex:destinationIndexPath.item];
+    [_datas insertObject:objc atIndex:destinationIndexPath.item];
 }
 
 //通过设置SupplementaryViewOfKind 来设置头部或者底部的view，其中 ReuseIdentifier 的值必须和 注册是填写的一致，本例都为 “reusableView”
