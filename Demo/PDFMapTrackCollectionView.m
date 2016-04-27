@@ -7,15 +7,16 @@
 //
 
 #import "PDFMapTrackCollectionView.h"
-#import "PDFMapTrackCollectionCell.h"
 
-@interface PDFMapTrackCollectionView ()
+
+@interface PDFMapTrackCollectionView ()<PDLCollectionCellDelegate>
 
 @property (nonatomic, copy) NSMutableArray *datas;
 
 @end
 
 @implementation PDFMapTrackCollectionView
+
 
 - (id)initWithFrame:(CGRect)frame viewLayou:(UICollectionViewLayout *)viewLayout itemsCount:(NSInteger)count{
     
@@ -36,13 +37,27 @@
             NSString *imageName = [NSString stringWithFormat:@"%d",i];
             [_datas addObject:imageName];
         }
+        self.showScrollRoll = NO;
         self.delegate = self;
         self.dataSource = self;
         //此处给其增加长按手势，用此手势触发cell移动效果
         UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handlelongGesture:)];
         [self addGestureRecognizer:longGesture];
+        
+        self.alpha = 0;
+        [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionTransitionFlipFromLeft
+                         animations:^{ self.alpha = 1.0; } completion:nil];
     }
     return self;
+}
+
+- (void)removeFromSuperview{
+        
+    [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionTransitionFlipFromLeft
+                     animations:^{ self.alpha = 0.0; } completion:^(BOOL finished){
+                         
+                         //[self removeFromSuperview];
+                     }];
 }
 
 - (NSInteger)itemCount{
@@ -73,6 +88,14 @@
     }
 }
 
+- (void)setShowScrollRoll:(BOOL)showScrollRoll{
+    
+    _showScrollRoll = showScrollRoll;
+    
+    self.showsVerticalScrollIndicator = showScrollRoll;
+    self.showsHorizontalScrollIndicator = showScrollRoll;
+}
+
 #pragma mark -- UICollectionViewDataSource
 //定义展示的UICollectionViewCell的个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -93,9 +116,14 @@
 
     cell.backgroundColor = [UIColor colorWithRed:((60 * indexPath.row) / 255.0) green:((70 * indexPath.row)/255.0) blue:((80 * indexPath.row)/255.0) alpha:1.0f];
     //cell.botlabel.text = [NSString stringWithFormat:@"{%ld,%ld}",(long)indexPath.section,(long)indexPath.row];
+    cell.delegate = self;
     
     /* 设置图片背景 */
-    if (self.itemImages.count > indexPath.row)  cell.topImage.image = self.itemImages[indexPath.row];
+    if (self.itemImages.count > indexPath.row) {
+        
+        cell.topImage.defaultImage = self.itemImages[indexPath.row];
+        cell.topImage.indexPath = indexPath;
+    }
     
     if ([self.collectionDelegate respondsToSelector:@selector(collectionView:collectionViewCell:cellForRowAtIndexPath:)]) {
         [self.collectionDelegate collectionView:collectionView collectionViewCell:cell cellForRowAtIndexPath:indexPath];
@@ -105,12 +133,14 @@
     return cell;
 }
 
+/*
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath{
     
     PDFMapTrackCollectionCell *cell = (PDFMapTrackCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
     cell.selected = false;
     cell.highlighted = true;
 }
+ */
 
 #pragma mark --UICollectionViewDelegateFlowLayout
 
@@ -127,6 +157,7 @@
     return UIEdgeInsetsMake(spaceZone/2, 5, 5, 5);
 }
 
+//定义每个UICollectionView之前的距离
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
     
     CGFloat spaceZone = (CGRectGetHeight(self.bounds) - (CGRectGetWidth(self.bounds) * [collectionView numberOfItemsInSection:0]))/[collectionView numberOfItemsInSection:0];
@@ -146,6 +177,22 @@
         [self.collectionDelegate collectionView:collectionView didSelectRowAtIndexPath:indexPath];
     }
 }
+
+
+- (void)collectionCell:(UICollectionViewCell *)cell imageView:(PDFImageView *)imageView didSelectdRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([self.collectionDelegate respondsToSelector:@selector(collectionView:collectionCell:imageView:didSelectdRowAtIndexPath:)]) {
+        [self.collectionDelegate collectionView:self collectionCell:cell imageView:imageView didSelectdRowAtIndexPath:indexPath];
+    }
+}
+
+- (void)collectionCell:(UICollectionViewCell *)cell imageView:(PDFImageView *)imageView didUnSelectdRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([self.collectionDelegate respondsToSelector:@selector(collectionView:collectionCell:imageView:didUnSelectdRowAtIndexPath:)]) {
+        [self.collectionDelegate collectionView:self collectionCell:cell imageView:imageView didUnSelectdRowAtIndexPath:indexPath];
+    }
+}
+
 //返回这个UICollectionView是否可以被选择
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {

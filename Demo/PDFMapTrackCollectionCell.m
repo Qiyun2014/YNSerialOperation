@@ -10,35 +10,35 @@
 
 @implementation PDFMapTrackCollectionCell
 
-#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
-
-#define kButton_tintColor_agree UIColorFromRGB(0xef6f22)    //不同意显示色值
-#define kButton_tintColor_disagree UIColorFromRGB(0x767676) //同意显示色值
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
     {
-        
         _topImage  = [[PDFImageView alloc] initWithFrame:CGRectInset(self.bounds, 15, 15)];
         _topImage.userInteractionEnabled = YES;
         _topImage.highlighted = YES;
         _topImage.contentMode = UIViewContentModeScaleAspectFit;
+        _topImage.delegate = self;
         [self.contentView addSubview:_topImage];
         
-        UIInterpolatingMotionEffect *verticalMotionEffect = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-        verticalMotionEffect.minimumRelativeValue = @(-20);
-        verticalMotionEffect.maximumRelativeValue = @(20);
-        
-        UIInterpolatingMotionEffect *horizontalMotionEffect = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-        horizontalMotionEffect.minimumRelativeValue = @(-20);
-        horizontalMotionEffect.maximumRelativeValue = @(20);
-        
-        UIMotionEffectGroup *group = [UIMotionEffectGroup new];
-        
-        group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
-        [_topImage addMotionEffect:group];
+        /*  添加motion effect */
+        {
+            UIInterpolatingMotionEffect *verticalMotionEffect = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y"
+                                                                                                                type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+            verticalMotionEffect.minimumRelativeValue = @(-20);
+            verticalMotionEffect.maximumRelativeValue = @(20);
+            
+            UIInterpolatingMotionEffect *horizontalMotionEffect = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x"
+                                                                                                                  type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+            horizontalMotionEffect.minimumRelativeValue = @(-20);
+            horizontalMotionEffect.maximumRelativeValue = @(20);
+            
+            UIMotionEffectGroup *group = [UIMotionEffectGroup new];
+            
+            group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+            [_topImage addMotionEffect:group];
+        }
         
         /*
         _item = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -78,12 +78,23 @@
     return self;
 }
 
+- (void)imageView:(PDFImageView *)imageView didSelectdRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([self.delegate respondsToSelector:@selector(collectionCell:imageView:didSelectdRowAtIndexPath:)]) {
+        [self.delegate collectionCell:self imageView:imageView didSelectdRowAtIndexPath:indexPath];
+    }
+}
 
+- (void)imageView:(PDFImageView *)imageView didUnSelectdRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([self.delegate respondsToSelector:@selector(collectionCell:imageView:didUnSelectdRowAtIndexPath:)]) {
+        [self.delegate collectionCell:self imageView:imageView didUnSelectdRowAtIndexPath:indexPath];
+    }
+}
 
 - (void)layoutSubviews{
 
     [super layoutSubviews];
-
 }
 
 @end
@@ -92,15 +103,51 @@
 @implementation PDFImageView
 
 
+#pragma mark    -   get method
+
+- (void)setSeleted:(BOOL)seleted{
+    
+    _seleted = seleted;
+    
+    if (!_seleted)           self.image = _defaultImage;
+    else { if (_seletedImage)    self.image = _seletedImage;}
+}
+
+#pragma mark    -   set method
+
+- (void)setDefaultImage:(UIImage *)defaultImage{
+    
+    _defaultImage = defaultImage;
+    self.seleted = NO;
+}
+
+- (void)setSeletedImage:(UIImage *)seletedImage{
+    
+    _seletedImage = seletedImage;
+    self.seleted = YES;
+}
+
+
+
+#pragma mark    -   responder method
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     
     self.layer.opacity = 0.5;
+    
+    if (!self.seleted) {
+        
+        if ([self.delegate respondsToSelector:@selector(imageView:didSelectdRowAtIndexPath:)]) {
+            [self.delegate imageView:self didSelectdRowAtIndexPath:self.indexPath];
+        }
+    }else{
+        
+        if ([self.delegate respondsToSelector:@selector(imageView:didUnSelectdRowAtIndexPath:)]) {
+            [self.delegate imageView:self didUnSelectdRowAtIndexPath:self.indexPath];
+        }
+    }
 }
 
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    
-    self.layer.opacity = 1;
-}
 
 - (void)touchesCancelled:(nullable NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event{
     
@@ -108,24 +155,10 @@
 }
 
 
-- (void)pressesBegan:(NSSet<UIPress *> *)presses withEvent:(nullable UIPressesEvent *)event NS_AVAILABLE_IOS(9_0){
-    
-    self.layer.opacity = 0.5;
-}
-
-- (void)pressesChanged:(NSSet<UIPress *> *)presses withEvent:(nullable UIPressesEvent *)event NS_AVAILABLE_IOS(9_0){
-   
-    self.layer.opacity = 0.5;
-}
-
-- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(nullable UIPressesEvent *)event NS_AVAILABLE_IOS(9_0){
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event{
     
     self.layer.opacity = 1;
-}
-
-- (void)pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(nullable UIPressesEvent *)event NS_AVAILABLE_IOS(9_0){
     
-    self.layer.opacity = 1;
 }
 
 @end
