@@ -282,6 +282,9 @@
 
 
 - (void)handlelongGesture:(UILongPressGestureRecognizer *)longGesture {
+    
+    CGFloat version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    
     //判断手势状态
     switch (longGesture.state) {
             
@@ -292,22 +295,22 @@
                 break;
             }
             //在路径上则开始移动该路径上的cell
-            [self beginInteractiveMovementForItemAtIndexPath:indexPath];
+            if (version >= 9.0) [self beginInteractiveMovementForItemAtIndexPath:indexPath];
         }
             break;
             
         case UIGestureRecognizerStateChanged:
             //移动过程当中随时更新cell位置
-            [self updateInteractiveMovementTargetPosition:[longGesture locationInView:self]];
+            if (version >= 9.0) [self updateInteractiveMovementTargetPosition:[longGesture locationInView:self]];
             break;
             
         case UIGestureRecognizerStateEnded:
             //移动结束后关闭cell移动
-            [self endInteractiveMovement];
+            if (version >= 9.0) [self endInteractiveMovement];
             break;
             
         default:
-            [self cancelInteractiveMovement];
+            if (version >= 9.0) [self cancelInteractiveMovement];
             break;
     }
 }
