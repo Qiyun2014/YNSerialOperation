@@ -12,6 +12,7 @@
 @interface PDFMapTrackCollectionView ()<PDLCollectionCellDelegate>
 
 @property (nonatomic, copy) NSMutableArray *datas;
+@property (nonatomic, strong) PDLMapTrackAccessoryView  *accessoryView;
 
 @end
 
@@ -51,6 +52,49 @@
     return self;
 }
 
+
+- (void)accessoryItems:(BOOL)show withFrame:(CGRect)frame superView:(UIView *)superView{
+    
+    if (show) {
+        
+        if (!CGRectIsEmpty(frame) && !CGRectIsNull(frame)) {
+            
+            self.accessoryView.frame = CGRectInset(frame, frame.size.width/2 - 1, frame.size.height/2 - 1);
+            
+            [UIView animateWithDuration:0.2
+                                  delay:0
+                 usingSpringWithDamping:0.5
+                  initialSpringVelocity:0
+                                options:UIViewAnimationOptionCurveEaseOut
+                             animations:^{
+                                 
+                                 self.accessoryView.frame = frame;
+                                 
+                             } completion:^(BOOL finished) {
+                                 
+                                 [self.accessoryView imageSelectedIndex:0];
+                                 self.accessoryView.frame = frame;
+                             }];
+        }
+        [superView addSubview:self.accessoryView];
+    }else{
+        
+        [UIView animateWithDuration:0.2
+                              delay:0
+             usingSpringWithDamping:0.5
+              initialSpringVelocity:0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             
+                             self.accessoryView.frame = CGRectInset(frame, frame.size.width/2 - 1, frame.size.height/2 - 1);
+                             
+                         } completion:^(BOOL finished) {
+                             
+                             [self.accessoryView removeAllSubViews];
+                         }];
+    }
+}
+
 - (void)removeFromSuperview{
         
     [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:0 options:UIViewAnimationOptionTransitionFlipFromLeft
@@ -64,6 +108,17 @@
     
     return _datas.count;
 }
+
+- (PDLMapTrackAccessoryView *)accessoryView{
+    
+    if (!_accessoryView && CGRectIsEmpty(_accessoryView.frame)) {
+        
+        _accessoryView = [[PDLMapTrackAccessoryView alloc] initWithFrame:CGRectZero backgroundImage:[UIImage imageNamed:@"map_layer choose_bg"]];
+    }
+    
+    return _accessoryView;
+}
+
 
 - (void)setItemImages:(NSArray *)itemImages{
     
@@ -258,3 +313,146 @@
 }
 
 @end
+
+
+#pragma mark    -   PDLMapTrackAccessoryView
+
+@interface PDLMapTrackAccessoryView () 
+
+@property (nonatomic, strong) PDFMapTrackCollectionView   *itemCollectionView;
+
+@end
+
+@implementation PDLMapTrackAccessoryView{
+    
+    CGFloat wid ;
+    CGFloat hei ;
+}
+
+
+- (instancetype)initWithFrame:(CGRect)frame backgroundImage:(UIImage *)bgImage{
+    
+    if (self = [super initWithFrame:frame]) {
+        
+        self.image = bgImage;
+        self.contentMode = UIViewContentModeScaleToFill;
+        self.userInteractionEnabled = YES;
+        
+    }
+    return self;
+}
+
+- (void)layoutSubviews{
+    
+    [super layoutSubviews];
+    
+}
+
+- (PDFMapTrackCollectionView *)itemCollectionView{
+    
+    if (!_itemCollectionView) {
+        
+        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+        
+        wid = CGRectGetWidth(self.bounds);
+        hei = CGRectGetHeight(self.bounds);
+        
+        CGRect rect = CGRectMake(wid * 0.08, hei * 0.1, wid * 0.77, hei * 0.65);
+        
+        _itemCollectionView = [[PDFMapTrackCollectionView alloc] initWithFrame:rect viewLayou:flowLayout itemsCount:3];
+        _itemCollectionView.backgroundColor = [UIColor redColor];
+        _itemCollectionView.showBorder = YES;
+        _itemCollectionView.collectionDelegate = self;
+        [_itemCollectionView setItemImages:@[[UIImage imageNamed:@"main_camera_shoot"],[UIImage imageNamed:@"main_camera_video_shooting"],[UIImage imageNamed:@"main_camera_setting"]]];
+    }
+    
+    return _itemCollectionView;
+}
+
+- (void)imageSelectedIndex:(NSInteger)index{
+    
+    [self addSubview:self.itemCollectionView];
+    if (_footTitles.count <= 0 || _footTitles) [self setFootTitles:@[@"2D地图",@"卫星地图",@"混合地图"]];
+}
+
+- (void)setFootTitles:(NSArray *)footTitles{
+    
+    _footTitles = footTitles;
+    
+    if (_footTitles.count >= 1) {
+        
+        [self.footTitles enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(wid * 0.08 + (idx * wid * 0.77/3), hei * 0.77, wid * 0.77/3, hei * 0.2)];
+            label.text = obj;
+            label.font = [UIFont systemFontOfSize:10];
+            label.textAlignment = NSTextAlignmentCenter;
+            label.textColor = [UIColor whiteColor];
+            label.backgroundColor = [UIColor clearColor];
+            [self addSubview:label];
+        }];
+    }
+}
+
+- (void)removeAllSubViews{
+    
+    [_itemCollectionView removeFromSuperview];
+    _itemCollectionView = nil;
+    for (UIView *view in self.subviews) { [view removeFromSuperview]; }
+    [self removeFromSuperview];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([collectionView isEqual:_itemCollectionView]) {
+        
+        if (indexPath.row == 1) {
+            NSLog(@"点击录像的cell。。。");
+        }
+    }
+    
+    NSLog(@"indexPath = %@",indexPath);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView collectionCell:(UICollectionViewCell *)cell imageView:(PDFImageView *)imageView didSelectdRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([collectionView isEqual:_itemCollectionView]) {
+        
+        if (indexPath.row == 1) {
+            
+            NSLog(@"点击图像 indexPath = %@",indexPath);
+            imageView.seletedImage = [UIImage imageNamed:@"main_camera_video_stop"];
+        }
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView collectionCell:(UICollectionViewCell *)cell imageView:(PDFImageView *)imageView didUnSelectdRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    NSLog(@"取消选中图像 indexPath = %@",indexPath);
+    imageView.seleted = NO;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView collectionViewCell:(UICollectionViewCell *)cell cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if ([collectionView isEqual:_itemCollectionView]) {
+        
+        collectionView.backgroundColor = [UIColor blackColor];
+        cell.backgroundColor = [UIColor blackColor];
+    }else{
+        
+        collectionView.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = [UIColor clearColor];
+    }
+}
+
+- (void)dealloc{
+    
+    [self removeAllSubViews];
+}
+
+@end
+
+
+
+

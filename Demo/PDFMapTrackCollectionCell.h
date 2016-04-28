@@ -54,9 +54,10 @@
 
 @property (nonatomic, copy) UIImage *seletedImage;    /*  选中图片  */
 @property (nonatomic, copy) UIImage *defaultImage;    /*  默认图片  */
-@property (nonatomic, assign) BOOL seleted;         /*  是否选中，默认为NO */
+@property (nonatomic, assign) BOOL seleted;           /*  是否选中，默认为NO */
 @property (nonatomic, copy) NSIndexPath *indexPath;   /*  当前所在的位置   */
 
 @property (nonatomic, weak) id<PDLImageViewDelegate> delegate;
+
 
 @end

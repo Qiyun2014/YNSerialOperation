@@ -13,6 +13,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    
     if (self)
     {
         _topImage  = [[PDFImageView alloc] initWithFrame:CGRectInset(self.bounds, 15, 15)];
