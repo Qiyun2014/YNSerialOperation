@@ -10,6 +10,8 @@
 
 @interface PDLLayerManagerView (PDLLayerManagerView_contentUpdate)
 
+- (PDLBackAction)backAction;
+- (PDLSettingAction)settingAction;
 
 - (void)setWifi:(NSInteger)wifi;
 - (void)setSatellite:(NSInteger)satellite;

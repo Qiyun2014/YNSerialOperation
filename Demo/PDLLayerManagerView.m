@@ -97,8 +97,16 @@ static PDLLayerManagerView *managerView = nil;
         _navigationBar = [[PDLNavigationBar alloc] initWithImage:KGetImage(@"main_status bar_bg_red")];
         _navigationBar.userInteractionEnabled = YES;
         _navigationBar.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), (Iphone?44:66));
-        self.backAction = _navigationBar.backAction;
-        self.settingAction = _navigationBar.settingAction;
+        
+        __unsafe_unretained PDLLayerManagerView *weakSelf = self;
+        
+        _navigationBar.backAction = ^(UIButton *btn, BOOL fin)  {
+            if (weakSelf.backAction) weakSelf.backAction(btn, fin);
+        };
+        
+        _navigationBar.settingAction = ^(UIButton *btn, BOOL fin)   {
+            if (weakSelf.settingAction) weakSelf.settingAction(btn, fin);
+        };
     }
     return _navigationBar;
 }

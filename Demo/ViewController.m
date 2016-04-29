@@ -30,12 +30,9 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     self.managerView = [[PDLLayerManagerView alloc] initWithFrame:self.view.bounds];
+
     [self.view addSubview:self.managerView];
     
-    self.managerView.backAction = ^(UIButton *button, BOOL finished){
-        
-        NSLog(@"返回...");
-    };
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         

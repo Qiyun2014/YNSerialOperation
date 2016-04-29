@@ -10,7 +10,21 @@
 
 @implementation PDLLayerManagerView (PDLLayerManagerView_contentUpdate)
 
+- (PDLBackAction)backAction{
+    
+    return ^(UIButton *button, BOOL finished){
+        
+        NSLog(@"返回...");
+    };
+}
 
+- (PDLSettingAction)settingAction{
+    
+    return ^(UIButton *button, BOOL finished){
+        
+        NSLog(@"设置、、、");
+    };
+}
 
 - (void)setSatellite:(NSInteger)satellite{
     
