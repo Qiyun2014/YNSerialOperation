@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "PDLLayerManagerView+contentUpdate.h"
 
 @interface ViewController : UIViewController
 

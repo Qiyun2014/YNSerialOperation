@@ -110,7 +110,7 @@
     
     _seleted = seleted;
     
-    if (!_seleted)           self.image = _defaultImage;
+    if (!_seleted)           self.image = [_defaultImage isKindOfClass:[UIImage class]]?_defaultImage:nil;
     else { if (_seletedImage)    self.image = _seletedImage;}
 }
 

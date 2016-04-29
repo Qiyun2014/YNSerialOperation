@@ -18,6 +18,8 @@
 		FA4AF1D41CCA2C0500B2B981 /* PDFMapTrackCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4AF1D11CCA2C0500B2B981 /* PDFMapTrackCollectionView.m */; };
 		FA4AF1D51CCA2C0500B2B981 /* PDFMapTrackCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4AF1D31CCA2C0500B2B981 /* PDFMapTrackCollectionCell.m */; };
 		FA5886E61CB5182000ECB5C3 /* YNSerialOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5886E51CB5182000ECB5C3 /* YNSerialOperation.m */; };
+		FA5D886D1CD2EFA300799EE1 /* PDLLayerManagerView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5D886C1CD2EFA300799EE1 /* PDLLayerManagerView.m */; };
+		FA5D88701CD35A9C00799EE1 /* PDLLayerManagerView+contentUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5D886F1CD35A9C00799EE1 /* PDLLayerManagerView+contentUpdate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +62,10 @@
 		FA4AF1D31CCA2C0500B2B981 /* PDFMapTrackCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFMapTrackCollectionCell.m; sourceTree = "<group>"; };
 		FA5886E41CB5182000ECB5C3 /* YNSerialOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YNSerialOperation.h; sourceTree = "<group>"; };
 		FA5886E51CB5182000ECB5C3 /* YNSerialOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YNSerialOperation.m; sourceTree = "<group>"; };
+		FA5D886B1CD2EFA300799EE1 /* PDLLayerManagerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDLLayerManagerView.h; sourceTree = "<group>"; };
+		FA5D886C1CD2EFA300799EE1 /* PDLLayerManagerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDLLayerManagerView.m; sourceTree = "<group>"; };
+		FA5D886E1CD35A9C00799EE1 /* PDLLayerManagerView+contentUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PDLLayerManagerView+contentUpdate.h"; sourceTree = "<group>"; };
+		FA5D886F1CD35A9C00799EE1 /* PDLLayerManagerView+contentUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PDLLayerManagerView+contentUpdate.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +116,10 @@
 		FA1C523B1CA0F14D00C3C73A /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				FA5D886E1CD35A9C00799EE1 /* PDLLayerManagerView+contentUpdate.h */,
+				FA5D886F1CD35A9C00799EE1 /* PDLLayerManagerView+contentUpdate.m */,
+				FA5D886B1CD2EFA300799EE1 /* PDLLayerManagerView.h */,
+				FA5D886C1CD2EFA300799EE1 /* PDLLayerManagerView.m */,
 				FA4AF1D01CCA2C0500B2B981 /* PDFMapTrackCollectionView.h */,
 				FA4AF1D11CCA2C0500B2B981 /* PDFMapTrackCollectionView.m */,
 				FA4AF1D21CCA2C0500B2B981 /* PDFMapTrackCollectionCell.h */,
@@ -287,9 +297,11 @@
 			files = (
 				FA1C52441CA0F14D00C3C73A /* ViewController.m in Sources */,
 				FA1C52411CA0F14D00C3C73A /* AppDelegate.m in Sources */,
+				FA5D88701CD35A9C00799EE1 /* PDLLayerManagerView+contentUpdate.m in Sources */,
 				FA4AF1D41CCA2C0500B2B981 /* PDFMapTrackCollectionView.m in Sources */,
 				FA1C523E1CA0F14D00C3C73A /* main.m in Sources */,
 				FA5886E61CB5182000ECB5C3 /* YNSerialOperation.m in Sources */,
+				FA5D886D1CD2EFA300799EE1 /* PDLLayerManagerView.m in Sources */,
 				FA4AF1D51CCA2C0500B2B981 /* PDFMapTrackCollectionCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
