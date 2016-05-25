@@ -10,12 +10,14 @@
 #import "PDFMapTrackCollectionView.h"
 #import "PDFMapTrackCollectionCell.h"
 
+#define KManagerView_label_text_default @"N/A"
+#define KManagerView_label_font_default 12
+
 @interface PDLLayerManagerView ()<PDFCollectionViewDelegate>
 
 @property (nonatomic, strong) PDFMapTrackCollectionView *videoCollectionView;
 @property (nonatomic, strong) PDFMapTrackCollectionView *flyCollectionView;
 @property (nonatomic, strong) PDFMapTrackCollectionView *mapCollectionView;
-
 
 
 @end
@@ -116,13 +118,13 @@ static PDLLayerManagerView *managerView = nil;
     if (!_coverBar) {
         
         UIImage *coverImage = KGetImage(@"main_button_bg");
+        CGRect frame = CGRectMake((CGRectGetWidth(self.bounds) - coverImage.size.width)/2,
+                                     CGRectGetHeight(self.bounds) - coverImage.size.height - (Iphone?22:33),
+                                     coverImage.size.width,
+                                     coverImage.size.height);
         
-        _coverBar = [[UIImageView alloc] initWithImage:coverImage];
-        _coverBar.userInteractionEnabled = YES;
-        _coverBar.frame = CGRectMake((CGRectGetWidth(self.bounds) - coverImage.size.width)/2,
-                                          CGRectGetHeight(self.bounds) - coverImage.size.height - (Iphone?22:33),
-                                          coverImage.size.width,
-                                          coverImage.size.height);
+        _coverBar = [[PDLCoverImageView alloc] initWithFrame:frame];
+        _coverBar.image = coverImage;
     }
     return _coverBar;
 }
@@ -291,10 +293,10 @@ static PDLLayerManagerView *managerView = nil;
     [self addSubview:self.back];
     [self addSubview:self.set];
     
-    [self addSubview:self.satellite];
-    [self addSubview:self.wifi];
-    [self addSubview:self.handle];
-    [self addSubview:self.fly];
+    [self addSubview:self.satelliteLabel];
+    [self addSubview:self.wifiLabel];
+    [self addSubview:self.handleLabel];
+    [self addSubview:self.flyLabel];
 }
 
 - (NSArray *)images{
@@ -304,53 +306,53 @@ static PDLLayerManagerView *managerView = nil;
     return images;
 }
 
-- (UILabel *)satellite{
+- (UILabel *)satelliteLabel{
     
-    if (!_satellite) {
+    if (!_satelliteLabel) {
         
-        _satellite = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) * 0.12, 0, CGRectGetWidth(self.bounds) * 0.08, CGRectGetHeight(self.bounds))];
-        _satellite.attributedText = [self attributeText:@"8" addImage:[self images][0] direction:NO];
-        _satellite.adjustsFontSizeToFitWidth = YES;
-        _satellite.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+        _satelliteLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) * 0.12, 0, CGRectGetWidth(self.bounds) * 0.08, CGRectGetHeight(self.bounds))];
+        _satelliteLabel.attributedText = [self attributeText:KManagerView_label_text_default addImage:[self images][0] direction:NO];
+        _satelliteLabel.adjustsFontSizeToFitWidth = YES;
+        _satelliteLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     }
-    return _satellite;
+    return _satelliteLabel;
 }
 
-- (UILabel *)wifi{
+- (UILabel *)wifiLabel{
     
-    if (!_wifi) {
+    if (!_wifiLabel) {
         
-        _wifi = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) * 0.25, 0, CGRectGetWidth(self.bounds) * 0.08, CGRectGetHeight(self.bounds))];
-        _wifi.attributedText = [self attributeText:@"80%" addImage:[self images][1] direction:NO];
-        _wifi.adjustsFontSizeToFitWidth = YES;
-        _wifi.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+        _wifiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) * 0.25, 0, CGRectGetWidth(self.bounds) * 0.08, CGRectGetHeight(self.bounds))];
+        _wifiLabel.attributedText = [self attributeText:KManagerView_label_text_default addImage:[self images][1] direction:NO];
+        _wifiLabel.adjustsFontSizeToFitWidth = YES;
+        _wifiLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
     }
-    return _wifi;
+    return _wifiLabel;
 }
 
-- (UILabel *)handle{
+- (UILabel *)handleLabel{
     
-    if (!_handle) {
+    if (!_handleLabel) {
         
-        _handle = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) * 0.67, 0, CGRectGetWidth(self.bounds) * 0.08, CGRectGetHeight(self.bounds))];
-        _handle.attributedText = [self attributeText:@"90%" addImage:[self images][2] direction:NO];
-        _handle.adjustsFontSizeToFitWidth = YES;
-        _handle.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+        _handleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) * 0.67, 0, CGRectGetWidth(self.bounds) * 0.08, CGRectGetHeight(self.bounds))];
+        _handleLabel.attributedText = [self attributeText:KManagerView_label_text_default addImage:[self images][2] direction:NO];
+        _handleLabel.adjustsFontSizeToFitWidth = YES;
+        _handleLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     }
-    return _handle;
+    return _handleLabel;
 }
 
-- (UILabel *)fly{
+- (UILabel *)flyLabel{
     
-    if (!_fly) {
+    if (!_flyLabel) {
         
-        _fly = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) * 0.8, 0, CGRectGetWidth(self.bounds) * 0.08, CGRectGetHeight(self.bounds))];
-        _fly.attributedText = [self attributeText:@"90%" addImage:[self images][3] direction:NO];
-        _fly.adjustsFontSizeToFitWidth = YES;
-        _fly.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+        _flyLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.bounds) * 0.8, 0, CGRectGetWidth(self.bounds) * 0.08, CGRectGetHeight(self.bounds))];
+        _flyLabel.attributedText = [self attributeText:KManagerView_label_text_default addImage:[self images][3] direction:NO];
+        _flyLabel.adjustsFontSizeToFitWidth = YES;
+        _flyLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     }
-    return _fly;
+    return _flyLabel;
 }
 
 
@@ -416,7 +418,7 @@ static PDLLayerManagerView *managerView = nil;
     if (text) text = [@"  " stringByAppendingString:text];
     
     NSMutableAttributedString *attributed = [[NSMutableAttributedString alloc] initWithString:text];
-    [attributed setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:12],
+    [attributed setAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:KManagerView_label_font_default],
                                 NSForegroundColorAttributeName : [UIColor whiteColor]}
                         range:NSMakeRange(0, text.length)];
     
@@ -437,3 +439,84 @@ static PDLLayerManagerView *managerView = nil;
 }
 
 @end
+
+
+@implementation PDLCoverImageView
+
+- (instancetype)initWithFrame:(CGRect)frame{
+    
+    if (self == [super initWithFrame:frame]) {
+        
+        self.frame = frame;
+        
+        [self addSuviews];
+    }
+    return self;
+}
+
+- (void)layoutSubviews{
+    
+    [super layoutSubviews];
+    
+    CGFloat wid = CGRectGetWidth(self.bounds)/3;
+    CGFloat hei = CGRectGetHeight(self.bounds) * 0.7;
+    
+    self.altLabel.frame = CGRectMake(0, CGRectGetHeight(self.bounds) * 0.15, wid, hei);
+    self.stuLabel.frame = CGRectMake(wid * 1, CGRectGetHeight(self.bounds) * 0.15, wid, hei);
+    self.disLabel.frame = CGRectMake(wid * 2, CGRectGetHeight(self.bounds) * 0.15, wid, hei);
+}
+
+- (NSMutableAttributedString *)aString:(NSString *)string{
+    
+    NSMutableAttributedString *aString = [[NSMutableAttributedString alloc] initWithString:[@"ALT: " stringByAppendingString:string]];
+    [aString addAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:KManagerView_label_font_default]} range:NSMakeRange(0, 5)];
+    [aString addAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:KManagerView_label_font_default + 3]} range:NSMakeRange(5, [aString length] - 5)];
+    return aString;
+}
+
+- (UILabel *)altLabel{
+    
+    if (!_altLabel) {
+        
+        _altLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _altLabel.textColor = [UIColor whiteColor];
+        _altLabel.attributedText = [self aString:KManagerView_label_text_default];
+        _altLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _altLabel;
+}
+
+- (UILabel *)disLabel{
+    
+    if (!_disLabel) {
+        
+        _disLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _disLabel.textColor = [UIColor whiteColor];
+        _disLabel.attributedText = [self aString:KManagerView_label_text_default];
+        _disLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _disLabel;
+}
+
+- (UILabel *)stuLabel{
+    
+    if (!_stuLabel) {
+        
+        _stuLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _stuLabel.textColor = [UIColor whiteColor];
+        _stuLabel.text = kFlightModeNone;
+        _stuLabel.font = [UIFont boldSystemFontOfSize:KManagerView_label_font_default + 4];
+        _stuLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _stuLabel;
+}
+
+- (void)addSuviews{
+    
+    [self addSubview:self.altLabel];
+    [self addSubview:self.disLabel];
+    [self addSubview:self.stuLabel];
+}
+
+@end
+

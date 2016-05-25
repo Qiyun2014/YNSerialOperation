@@ -30,11 +30,20 @@ typedef NS_ENUM(NSInteger, PDLConnectionStatus) {
     PDLConnection_bad           /* 差 */
 };
 
+static NSString* const kFlightModeAttitude  = @"ATTITUDE";
+static NSString* const kFlightModeAUTO      = @"WAYPOINT";
+static NSString* const kFlightModeGUIDE     = @"Take Off";
+static NSString* const kFlightModeRTL       = @"RTH";
+static NSString* const kFlightModeGPS       = @"P-GPS";
+static NSString* const kFlightModeNone      = @"NONE";
+
+
 typedef void (^PDLBackAction) (UIButton *button, BOOL finished);     /*  返回  */
 typedef void (^PDLSettingAction) (UIButton *button, BOOL finished);  /*  设置  */
 
 
-@class PDLNavigationBar;
+
+@class PDLNavigationBar,PDLCoverImageView;
 @interface PDLLayerManagerView : UIView
 
 + (PDLLayerManagerView *)shareInstanceManagerView;
@@ -42,7 +51,7 @@ typedef void (^PDLSettingAction) (UIButton *button, BOOL finished);  /*  设置 
 - (NSArray *)images;
 
 @property (nonatomic, strong) PDLNavigationBar   *navigationBar;
-@property (nonatomic, strong) UIImageView   *coverBar;
+@property (nonatomic, strong) PDLCoverImageView   *coverBar;
 
 @property (nonatomic) PDLRecordStatus recordStatus;     /*  视频录制状态  */
 @property (nonatomic) BOOL  cameraSet;                  /*  相机设置状态  */
@@ -58,6 +67,7 @@ typedef void (^PDLSettingAction) (UIButton *button, BOOL finished);  /*  设置 
 @property (nonatomic) NSInteger     handleBatteries;    /*  遥控器电量  */
 @property (nonatomic) NSInteger     flyBatteries;       /*  飞机电量  */
 
+
 @property (nonatomic, copy) PDLBackAction       backAction;     /*   返回   */
 @property (nonatomic, copy) PDLSettingAction    settingAction;  /*   设置   */
 
@@ -65,8 +75,7 @@ typedef void (^PDLSettingAction) (UIButton *button, BOOL finished);  /*  设置 
 /*      ---------------------  浮层<飞机距离>    ---------------------------     */
 @property (nonatomic, copy) NSString      *status;              /*  状态文本  */
 @property (nonatomic) CGFloat             altitude;             /*  海拔高度  */
-@property (nonatomic) CGFloat             distance;             /*  距离  */
-
+@property (nonatomic) CGFloat             distance;             /*  距离     */
 
 
 @end
@@ -79,17 +88,30 @@ typedef void (^PDLSettingAction) (UIButton *button, BOOL finished);  /*  设置 
 - (instancetype)initWithFrame:(CGRect)frame;
 - (instancetype)initWithImage:(UIImage *)image;
 
-@property (nonatomic, strong) UIButton  *back;
-@property (nonatomic, strong) UIButton  *set;
+@property (nonatomic, strong) UIButton  *back;          /*  返回按钮  */
+@property (nonatomic, strong) UIButton  *set;           /*  设置按钮  */
 
-@property (nonatomic, strong) UILabel *satellite;
-@property (nonatomic, strong) UILabel *wifi;
-@property (nonatomic, strong) UILabel *handle;
-@property (nonatomic, strong) UILabel *fly;
+@property (nonatomic, strong) UILabel *satelliteLabel;       /*  卫星强度  */
+@property (nonatomic, strong) UILabel *wifiLabel;            /*  wifi强度  */
+@property (nonatomic, strong) UILabel *handleLabel;          /*  遥控器电量  */
+@property (nonatomic, strong) UILabel *flyLabel;             /*  飞机电量  */
 
 @property (nonatomic, copy) PDLBackAction       backAction;     /*   返回   */
 @property (nonatomic, copy) PDLSettingAction    settingAction;  /*   设置   */
 
 - (NSMutableAttributedString *)attributeText:(NSString *)text addImage:(UIImage *)image direction:(BOOL)dir;
+
+@end
+
+
+@interface PDLCoverImageView : UIImageView
+
+- (instancetype)initWithFrame:(CGRect)frame;
+
+@property (nonatomic, strong) UILabel *altLabel;            /*  高度  */
+@property (nonatomic, strong) UILabel *disLabel;            /*  距离  */
+@property (nonatomic, strong) UILabel *stuLabel;            /*  飞行状况  */
+
+- (NSMutableAttributedString *)aString:(NSString *)string;
 
 @end

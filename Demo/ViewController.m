@@ -36,11 +36,50 @@
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        [self.managerView setWifi:66];
-        [self.managerView setSatellite:66];
-        [self.managerView setHandleBatteries:66];
-        [self.managerView setFlyBatteries:66];
+        [self.managerView setWifi:12];
+        [self.managerView setSatellite:22];
+        [self.managerView setHandleBatteries:32];
+        [self.managerView setFlyBatteries:43];
+        
+        [self.managerView setAltitude:99];
+        [self.managerView setDistance:222];
     });
+    
+    {
+        
+        [self.managerView getWifi:^(NSInteger wifi) {
+            
+            NSLog(@"wifi = %ld",(long)wifi);
+        }];
+        
+        [self.managerView getSatellite:^(NSInteger satellite) {
+            
+            NSLog(@"satellite = %ld",(long)satellite);
+        }];
+        
+        [self.managerView getFlyBatteries:^(NSInteger FlyBatteries) {
+            
+            NSLog(@"FlyBatteries = %ld",(long)FlyBatteries);
+        }];
+        
+        [self.managerView getHandleBatteries:^(NSInteger handleBatteries) {
+            
+            NSLog(@"handleBatteries = %ld",(long)handleBatteries);
+        }];
+    }
+    
+    {
+        [self.managerView getFlyAltitude:^(CGFloat alt) {
+            
+            NSLog(@"alt = %f",alt);
+        }];
+        
+        [self.managerView getFlyDistance:^(CGFloat dis) {
+            
+            NSLog(@"dis = %f",dis);
+        }];
+    }
+    
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
