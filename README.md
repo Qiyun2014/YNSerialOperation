@@ -1,5 +1,9 @@
 #使用NSOperation
 
+![GitHub set up](http://zh.mweb.im/asset/img/set-up-git.gif)
+
+
+
 ##创建
 ```
 operationQueue = [[NSOperationQueue alloc] init];
